@@ -1,23 +1,58 @@
 package com.jdbc;
 
+import com.jdbc.EmployeePayrollException;
 import com.jdbc.EmployeePayrollData;
 import java.util.List;
 
 public class EmployeePayrollService {
-    EmployeePayrollDBService dbService = new EmployeePayrollDBService();
+    private EmployeePayrollDBService employeePayrollDBService;
+    private List<EmployeePayrollData> employeePayrollList;
 
-    public enum IOService{
-        DB_IO;
+    public enum IOService {
+        DB_IO
     }
-
-    private List<EmployeePayrollData> employeePayrollData;
 
     public EmployeePayrollService() {
+        employeePayrollDBService = EmployeePayrollDBService.getInstance();
     }
 
-    public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) {
+    // Purpose : To get the list of employee payroll from the database
+   
+
+    public List<EmployeePayrollData> readEmployeePayrollData(IOService ioService) throws EmployeePayrollException {
         if(ioService.equals(IOService.DB_IO))
-            this.employeePayrollData = dbService.readData();
-        return this.employeePayrollData;
+            this.employeePayrollList = employeePayrollDBService.readData();
+        return this.employeePayrollList;
+    }
+         // To update the Employee Salary in the database
+        //        If the value is updated, the result value is greater than 0; else 0
+         //    Match the given name with the EmployeePayrollData list
+         //   If found, assign the given salary to the EmployeePayrollData list
+    
+    public void updateEmployeeSalary(String name, double salary) throws EmployeePayrollException {
+        int result = employeePayrollDBService.updateEmployeeData(name, salary);
+        if(result == 0)
+            return;
+        EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+        if( employeePayrollData != null )
+            employeePayrollData.salary = salary;
+    }
+
+           // To check whether the EmployeePayrollData is in sync with the DB
+           //      Use to equals() to compare the values
+     
+    public boolean checkEmployeePayrollInSyncWithDB(String name) throws EmployeePayrollException {
+        List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
+        return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
+    }
+
+     //Check the EmployeePayrollData list for the name
+        //If found, return the value else return null
+     
+    private EmployeePayrollData getEmployeePayrollData(String name) {
+        return this.employeePayrollList.stream()
+                .filter(employeePayrollDataItem -> employeePayrollDataItem.name.equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }
