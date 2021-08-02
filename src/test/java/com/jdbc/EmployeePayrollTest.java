@@ -18,7 +18,7 @@ public class EmployeePayrollTest {
         employeePayrollService = new EmployeePayrollService();
     }
 
-     //To check the count in database is matching in java program or not
+     // To check the count in database is matching in java program or not
      
     @Test
     public void givenEmployeePayrollInDB_WhenRetrieved_ShouldMatchEmployeeCount() throws EmployeePayrollException {
@@ -26,8 +26,8 @@ public class EmployeePayrollTest {
         Assert.assertEquals(5, employeePayrollData.size());
     }
 
-    //To test whether the salary is updated in the database and is synced with the DB
-    
+   //To test whether the salary is updated in the database and is synced with the DB
+
     @Test
     public void givenNewSalaryForEmployee_WhenUpdated_ShouldSyncWithDB() throws EmployeePayrollException {
         List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(EmployeePayrollService.IOService.DB_IO);
