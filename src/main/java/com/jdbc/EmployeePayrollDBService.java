@@ -15,26 +15,31 @@ public class EmployeePayrollDBService {
 
     private EmployeePayrollDBService() {
     }
-     // For creating a singleton object
-     
+
+   
+     //For creating a singleton object
+    
     public static EmployeePayrollDBService getInstance() {
         if ( employeePayrollDBService == null)
             employeePayrollDBService = new EmployeePayrollDBService();
         return employeePayrollDBService;
     }
-     //Read the employee payroll data from the database
-    
+
+ // Read the employee payroll data from the database
+     
+
     public List<EmployeePayrollData> readData() throws EmployeePayrollException {
         String sql = "SELECT * FROM employee_payroll";
         return getEmployeePayrollDataUsingDB(sql);
     }
-           //Update the salary in the DB using Statement Interface
+       // Update the salary in the DB using Statement Interface
     
     public int updateEmployeeData(String name, double salary) throws EmployeePayrollException {
         return this.updateEmployeeDataUsingStatement(name,salary);
     }
-    // Create connection with the database
-     
+
+   // Create connection with the database
+    
     private Connection getConnection() throws SQLException {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service";
         String userName = "root";
@@ -46,8 +51,8 @@ public class EmployeePayrollDBService {
         return connection;
     }
 
-  // Update the salary in the DB using Statement Interface
-   
+    //Update the salary in the DB using Statement Interface
+    
     private int updateEmployeeDataUsingStatement(String name, double salary) throws EmployeePayrollException {
         String sql = String.format("UPDATE employee_payroll SET salary = %.2f WHERE name = '%s';", salary, name);
         try (Connection connection = this.getConnection()){
@@ -57,9 +62,10 @@ public class EmployeePayrollDBService {
             throw new EmployeePayrollException("Please check the updateEmployeeDataUsingStatement() for detailed information!");
         }
     }
-           // Get the list of EmployeePayrollData using the assigned name
-            //    setString() is used to set the assigned name value in the sql query
-          //   Return all the attribute values listed for a particular name
+
+   // Get the list of EmployeePayrollData using the assigned name
+   //          setString() is used to set the assigned name value in the sql query
+   //           Return all the attribute values listed for a particular name
     
     public List<EmployeePayrollData> getEmployeePayrollData(String name) throws EmployeePayrollException {
         List<EmployeePayrollData> employeePayrollList = null;
@@ -75,7 +81,7 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
 
-   //Assign the value of the attributes in a list and return it
+     // Assign the value of the attributes in a list and return it
     
     private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) throws EmployeePayrollException {
         List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
@@ -93,8 +99,8 @@ public class EmployeePayrollDBService {
         return employeePayrollList;
     }
 
-   // To get the details of a particular employee from the DB using PreparedStatement Interface
-    
+    //To get the details of a particular employee from the DB using PreparedStatement Interface
+     
     private void preparedStatementForEmployeeData() throws EmployeePayrollException {
         try {
             Connection connection = this.getConnection();
@@ -104,9 +110,9 @@ public class EmployeePayrollDBService {
             throw new EmployeePayrollException("Please check the preparedStatementForEmployeeData() for detailed information!");
         }
     }
-     // Create connection to execute query and read the value from the database
-        // Assign the value in a list variable
-    
+          // Create connection to execute query and read the value from the database
+                //Assign the value in a list variable
+     
     private List<EmployeePayrollData> getEmployeePayrollDataUsingDB(String sql) throws EmployeePayrollException {
         List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
         try (Connection connection = this.getConnection()){
